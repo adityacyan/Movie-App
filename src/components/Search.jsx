@@ -1,4 +1,6 @@
 import React from 'react';
+import {useEffect} from "react";
+// const TMDB_API_KEY=
 //we better destructure from here only rather than writing it . bar bar as we know na kya kuya pass horra hai
 const Search = ({SearchTerm,setSearchTerm}) => {
 
