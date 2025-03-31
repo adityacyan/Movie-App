@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Search from "./components/Search.jsx";
 import Spinner from "./components/Spinner.jsx";
+import MovieCard from "./components/MovieCard.jsx";
 
 const API_BASE_URL = "https://api.themoviedb.org/3/";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+
 
 const API_OPTIONS = {
     method: "GET",
@@ -19,7 +21,9 @@ const App = () => {
     const [SearchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState(null);
     const [movieList, setMovieList] = useState([]);
+    const [GenreList, setGenreList] = useState([]);
     const [isloading, setIsloading] = useState(false);
+
 
     const fetchMovies = async () => {
         setIsloading(true);
@@ -56,9 +60,29 @@ const App = () => {
     }
 
 
+    const fetchGenres = async () => {
+        try {
+            const endpoint = `${API_BASE_URL}genre/movie/list`
+            const response = await fetch(endpoint, API_OPTIONS);
+
+            if (!response.ok) {
+                throw new Error(response.statusText);
+
+            }
+            const data = await response.json();
+            setGenreList(data.genres || [])
+        } catch (error) {
+            setError("Error fetching genres");
+        }
+    }
+
     useEffect(() => {
         fetchMovies()
-    }, []); //for searchtmdb
+        fetchGenres();
+    }, []); //for searchtmdb and genre
+
+
+
 
     return (
         <main>
@@ -83,7 +107,7 @@ const App = () => {
                 ) : error ? (<p className="text-red-500">{error}</p>) : (
                     <ul>
                         {movieList.map((movie) => (
-                            <li key={movie.id} className="text-white">{movie.title}</li>
+                            <MovieCard key={movie.id} movie={movie} GenreList={GenreList}/>
 
                         ))}
                     </ul>
