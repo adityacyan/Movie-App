@@ -1,7 +1,8 @@
 # 🎬 Movie App
 
-This is a simple movie app that allows users to search, view trending movies, and explore movie details by genre.
-
+This is a React app built with Vite and styled using Tailwind CSS that uses the TMDB API for fetching, searching, and
+displaying trending movies. It features a debounced search for optimized query performance, making movie discovery
+seamless and efficient.
 ## ✨ Features
 
 - 🔜 **Upcoming Feature**: Displaying similar movies based on user preferences.
