@@ -1,12 +1,60 @@
-# React + Vite
+# 🎬 Movie App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple movie app that allows users to search, view trending movies, and explore movie details by genre.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🔜 **Upcoming Feature**: Displaying similar movies based on user preferences.
 
-## Expanding the ESLint configuration
+- 🚀 **Header Complete**: Basic header implementation for easy navigation.
+- 🎥 **Movie Fetching**: Implemented API integration to fetch movie data.
+- 🗂️ **Movie Display and Genre Fetching**: Display movies and their genres using a clean and intuitive UI.
+- 🔎 **Optimized Movie Search**: Implemented search functionality with debounce to prevent excessive API calls.
+- 📊 **Trending Movies Section**: Added a dedicated section for trending movies.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/adityacyan/Movie-App.git
+```
+
+2. Navigate to the project directory:
+
+```bash
+cd movie-app
+```
+
+3. Install dependencies:
+
+```bash
+npm install
+```
+
+4. Start the application:
+
+```bash
+npm run dev
+```
+
+## 🌐 API
+
+The application uses a movie database API to fetch data. Make sure to configure your API key in a `.env` file:
+
+```env
+VITE_TMDB_API_KEY=your_api_key_here
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request.
+
+## 📝 License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## 👤 Author
+
+Developed by **adityacyan**.
+
