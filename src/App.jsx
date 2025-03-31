@@ -3,6 +3,7 @@ import Search from "./components/Search.jsx";
 import Spinner from "./components/Spinner.jsx";
 import MovieCard from "./components/MovieCard.jsx";
 import {useDebounce} from "react-use";
+import Footer from "./components/Footer.jsx";
 
 const API_BASE_URL = "https://api.themoviedb.org/3/";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -23,6 +24,8 @@ const App = () => {
     const [error, setError] = useState(null);
     const [movieList, setMovieList] = useState([]);
     const [GenreList, setGenreList] = useState([]);
+    const [SimilarMovieList, setSimilarMovieList] = useState([]); //will be done later
+    const [TrendingMovieList, setTrendingMovieList] = useState([]);
     const [isloading, setIsloading] = useState(false);
     const [DebouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
@@ -33,7 +36,7 @@ const App = () => {
         //always use try and catch in async
         try {
             const endpoint = query
-                ? `${API_BASE_URL}/search/movie?query=${encodeURI(query)}`
+                ? `${API_BASE_URL}search/movie?query=${encodeURIComponent(query)}`
                 : `${API_BASE_URL}discover/movie?sort_by=popularity.desc`;
 
             const response = await fetch(endpoint, API_OPTIONS);
@@ -80,16 +83,62 @@ const App = () => {
         }
     }
 
+
+    const fetchSimilarMovies = async (movie_id = null) => {
+        try {
+            const endpoint = `${API_BASE_URL}movie/${movie_id}/similar`
+            const response = await fetch(endpoint, API_OPTIONS);
+
+            if (!response.ok) {
+                throw new Error(response.statusText);
+
+            }
+            const data = await response.json();
+            setSimilarMovieList(data.results || [])
+        } catch (error) {
+            setError("Error fetching genres");
+        }
+    }//will be implemented later
+
+
+    const fetchTrendingMovies = async () => {
+
+        try {
+            const endpoint = `${API_BASE_URL}trending/movie/week?language=en-US`
+            const response = await fetch(endpoint, API_OPTIONS);
+
+            if (!response.ok) {
+                throw new Error(response.statusText);
+
+            }
+            const data = await response.json();
+            setTrendingMovieList(data.results || [])
+        } catch (error) {
+            setError("Error fetching TrendingMovies");
+        }
+
+
+    }
+
+
+
+
     useEffect(() => {
         fetchMovies(DebouncedSearchTerm)
         fetchGenres();
     }, [DebouncedSearchTerm]); //for debouncedsearchtmdb and genre
 
+    useEffect(() => {
+        fetchTrendingMovies();
+    }, []);
+
 
 
 
     return (
-        <main>
+        <div>
+            <div>
+                <main className="pb-20">
         <div className="pattern">
             <div className="wrapper">
             <header>
@@ -97,15 +146,35 @@ const App = () => {
                 <h1> Find <span className="text-gradient">Movies</span> which you will enjoy without Hassle</h1>
 
             </header>
+                {TrendingMovieList.length > 0 && (
+                    <section className="trending">
+                        <h2>Trending Movies</h2>
+                        {/* Marquee container */}
+                        <div className="marquee">
+                            <ul className="marquee-content">
+                                {TrendingMovieList.slice(0, 10).map((movie, index) => (
+                                    <li key={index}>
+                                        <p aria-label={`Movie ranking: ${(index % 10) + 1}`}>{(index % 10) + 1}</p>
+                                        <img
+                                            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                                            alt={movie.title}
+                                        />
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </section>
+                )}
 
-            <Search SearchTerm={SearchTerm} setSearchTerm={setSearchTerm}/>
+
+                <Search SearchTerm={SearchTerm} setSearchTerm={setSearchTerm}/>
 
             </div>
 
             <section className="all-movies">
 
 
-                <h2 className="mt-20"> All Movies</h2>
+                <h2> All Movies</h2>
                 {isloading ? (
                     <Spinner/>
                 ) : error ? (<p className="text-red-500">{error}</p>) : (
@@ -122,7 +191,11 @@ const App = () => {
         </div>
 
 
-            </main>
+                </main>
+            </div>
+            {/*<Footer className="absolute bottom-0 w-full"/>*/}
+        </div>
+
     );/*//props are like inputs which are passed into components as arguments*/
 };
 

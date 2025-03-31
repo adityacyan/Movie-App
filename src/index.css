@@ -61,23 +61,43 @@
 
     .trending {
         @apply mt-20;
+    }
 
-        & ul {
-            @apply flex flex-row overflow-y-auto gap-5 -mt-10 w-full hide-scrollbar;
+    .marquee {
+        @apply relative w-full overflow-x-auto hide-scrollbar;
+    }
+
+    .marquee-content {
+        @apply flex gap-5;
+        animation: marquee 20s linear infinite;
+    }
+
+    .marquee-content:hover {
+        animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(0);
         }
-
-        & ul li {
-            @apply min-w-[230px] flex flex-row items-center;
-        }
-
-        & ul li p {
-            @apply fancy-text mt-[22px] text-nowrap;
-        }
-
-        & ul li img {
-            @apply w-[127px] h-[163px] rounded-lg object-cover -ml-3.5;
+        100% {
+            transform: translateX(-50%);
         }
     }
+
+    .marquee-content li {
+        @apply min-w-[230px] flex flex-row items-center;
+    }
+
+    .marquee-content li p {
+        @apply fancy-text mt-[22px] whitespace-nowrap;
+    }
+
+    .marquee-content li img {
+        @apply w-[127px] h-[163px] rounded-lg object-cover -ml-3.5;
+    }
+
+
 
     .search {
         @apply w-full bg-light-100/5 px-4 py-3 rounded-lg mt-10 max-w-3xl mx-auto;
@@ -96,7 +116,8 @@
     }
 
     .all-movies {
-        @apply space-y-9;
+
+        @apply space-y-9 mx-20;
 
         & ul {
             @apply grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
