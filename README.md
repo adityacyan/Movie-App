@@ -5,13 +5,11 @@ displaying trending movies. It features a debounced search for optimized query p
 seamless and efficient.
 ## ✨ Features
 
-- 🔜 **Upcoming Feature**: Displaying similar movies based on user preferences.
-
-- 🚀 **Header Complete**: Basic header implementation for easy navigation.
-- 🎥 **Movie Fetching**: Implemented API integration to fetch movie data.
+- 🔜 **Movie Recommendations**: Displays similar movies based on user preferences.
+- 🎥 **Movie Fetching**: API to fetch movie data.
 - 🗂️ **Movie Display and Genre Fetching**: Display movies and their genres using a clean and intuitive UI.
-- 🔎 **Optimized Movie Search**: Implemented search functionality with debounce to prevent excessive API calls.
-- 📊 **Trending Movies Section**: Added a dedicated section for trending movies.
+- 🔎 **Optimized Movie Search**: Search functionality with debounce to prevent excessive API calls.
+- 📊 **Trending Movies Section**: Dedicated section for trending movies.
 
 ## 🛠️ Installation
 
