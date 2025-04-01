@@ -34,7 +34,7 @@ const MovieList = ({selectedMovie, similarMovieList, onSelectMovie, onClose}) =>
 
                     {/* Movie Details */}
                     <div className="w-full sm:w-2/3 flex flex-col gap-4">
-                        <h2 className="text-4xl font-bold">{selectedMovie?.title || "Squid Game 2"}</h2>
+                      <h2 className="text-4xl font-bold">{selectedMovie?.title || "Title Loading..."}</h2>
                         <div className="flex items-center gap-2 text-lg">
                 <span className="text-yellow-400 flex items-center">
                   <svg
@@ -58,33 +58,57 @@ const MovieList = ({selectedMovie, similarMovieList, onSelectMovie, onClose}) =>
                             {selectedMovie?.overview ||
                                 "Loading..."}
                         </p>
-                    </div>
-                </div>
-
-                {/* Similar Movies Section */}
-                <div className="mt-2">
-                    <h3 className="text-xl font-semibold mb-4">Movies Similar
-                        to {selectedMovie?.title || "Squid Game 2"}</h3>
-                    <div className="flex gap-4 overflow-x-auto pb-2">
-                        {similarMovieList && similarMovieList.length > 0 ? (
-                            similarMovieList.slice(0, 5).map((movie, index) => (
-                                <div
-                                    key={movie.id || index}
-                                    className="cursor-pointer w-[140px] flex-shrink-0 transition-transform hover:scale-105"
-                                    onClick={() => onSelectMovie(movie)}
-                                >
+                      {/*Similar Movies Section */}
+                      <div className="mt-2">
+                        <h3 className="text-xl font-semibold mb-4">Movies Similar
+                          to {selectedMovie?.title || "Squid Game 2"}</h3>
+                        <div className="flex gap-4 overflow-x-auto pb-2">
+                          {similarMovieList && similarMovieList.length > 0 ? (
+                              similarMovieList.slice(0, 5).map((movie, index) => (
+                                  <div
+                                      key={movie.id || index}
+                                      className="cursor-pointer w-[140px] flex-shrink-0 transition-transform hover:scale-105"
+                                      onClick={() => onSelectMovie(movie)}
+                                  >
                                     <img
                                         src={movie.img || `https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                                         alt={movie.title}
                                         className="rounded-lg shadow-md w-full h-auto"
                                     />
-                                </div>
-                            ))
-                        ) : (
-                            <p className="text-gray-400">No similar movies available.</p>
-                        )}
+                                  </div>
+                              ))
+                          ) : (
+                              <p className="text-gray-400">No similar movies available.</p>
+                          )}
+                        </div>
+                      </div>
                     </div>
                 </div>
+
+                {/* Similar Movies Section */}
+              {/*<div className="mt-2">*/}
+              {/*    <h3 className="text-xl font-semibold mb-4">Movies Similar*/}
+              {/*        to {selectedMovie?.title || "Squid Game 2"}</h3>*/}
+              {/*    <div className="flex gap-4 overflow-x-auto pb-2">*/}
+              {/*        {similarMovieList && similarMovieList.length > 0 ? (*/}
+              {/*            similarMovieList.slice(0, 5).map((movie, index) => (*/}
+              {/*                <div*/}
+              {/*                    key={movie.id || index}*/}
+              {/*                    className="cursor-pointer w-[140px] flex-shrink-0 transition-transform hover:scale-105"*/}
+              {/*                    onClick={() => onSelectMovie(movie)}*/}
+              {/*                >*/}
+              {/*                    <img*/}
+              {/*                        src={movie.img || `https://image.tmdb.org/t/p/w500${movie.poster_path}`}*/}
+              {/*                        alt={movie.title}*/}
+              {/*                        className="rounded-lg shadow-md w-full h-auto"*/}
+              {/*                    />*/}
+              {/*                </div>*/}
+              {/*            ))*/}
+              {/*        ) : (*/}
+              {/*            <p className="text-gray-400">No similar movies available.</p>*/}
+              {/*        )}*/}
+              {/*    </div>*/}
+              {/*</div>*/}
             </div>
         </div>
     );
