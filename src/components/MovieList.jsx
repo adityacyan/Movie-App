@@ -3,9 +3,27 @@ import React, {useEffect, useRef, useState} from 'react';
 const MovieList = ({selectedMovie, similarMovieList, onSelectMovie, onClose}) => {
   const similarMoviesRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
-
+  const [isMobile, setIsMobile] = useState(false); // State to track if the device is mobile
 
   useEffect(() => {
+    // Check if the screen is mobile or not on mount
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640); // Adjust the 640px as per your breakpoint
+    };
+
+    // Listen for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Initial check on mount
+    handleResize();
+
+    // Cleanup listener on unmount
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return; // Disable auto-scrolling on mobile
+
     const scrollInterval = setInterval(() => {
       if (similarMoviesRef.current) {
         const scrollWidth = similarMoviesRef.current.scrollWidth;
@@ -24,7 +42,7 @@ const MovieList = ({selectedMovie, similarMovieList, onSelectMovie, onClose}) =>
 
     // Cleanup the interval on unmount
     return () => clearInterval(scrollInterval);
-  }, []);
+  }, [isMobile]); // Re-run effect when isMobile state changes
 
   // Apply the calculated scroll position to the similar movies container
   useEffect(() => {
@@ -38,11 +56,15 @@ const MovieList = ({selectedMovie, similarMovieList, onSelectMovie, onClose}) =>
 
   return (
       <div
-          className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center p-10 overflow-y-auto sm:overflow-hidden">
+          className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center p-10 overflow-y-auto sm:overflow-hidden"
+      >
         <div
             className="w-[90vw] sm:w-[80vw] md:w-[70vw] bg-[#0f0a1e] p-8 rounded-xl shadow-xl relative text-white flex flex-col gap-6 p-10 max-h-[90vh] overflow-y-auto">
           {/* Close Button */}
-          <button className="absolute top-6 right-6 text-gray-300 hover:text-white z-10" onClick={onClose}>
+          <button
+              className="absolute top-6 right-6 text-gray-300 hover:text-white z-10"
+              onClick={onClose}
+          >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                   d="M18 6L6 18M6 6L18 18"
@@ -81,7 +103,7 @@ const MovieList = ({selectedMovie, similarMovieList, onSelectMovie, onClose}) =>
                   <path
                       d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                 </svg>
-                {(selectedMovie?.score && selectedMovie.score.toFixed(1)) || "0.0"}
+                {(selectedMovie?.score && selectedMovie.score.toFixed(1)) || "NA"}
               </span>
                 <span className="text-gray-400">•</span>
                 <span className="text-gray-400">
