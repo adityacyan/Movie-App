@@ -4,6 +4,32 @@
 @import "tailwindcss";
 
 @tailwind utilities;
+/* Add custom scrollbar styles in your global CSS file */
+@layer utilities {
+    /* Scrollbar styles for both desktop and mobile */
+    *::-webkit-scrollbar {
+        width: 8px; /* Width of the scrollbar */
+        height: 8px; /* Height of the scrollbar (horizontal scrollbar) */
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: rgba(35, 29, 63, 0.4); /* Light transparent color for the thumb */
+        border-radius: 10px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(35, 29, 63, 0.6); /* Slightly darker thumb when hovered */
+    }
+
+    *::-webkit-scrollbar-track {
+        background-color: rgba(15, 31, 35, 0.2); /* Semi-transparent dark track */
+        border-radius: 10px;
+    }
+
+    *::-webkit-scrollbar-corner {
+        background-color: rgba(15, 31, 35, 0.2); /* Matching the corner to the track */
+    }
+}
 
 @theme {
     --color-primary: #030014;
@@ -49,6 +75,7 @@
         @apply w-full max-w-lg h-auto object-contain mx-auto drop-shadow-md;
     }
 }
+
 
 @layer components {
     .pattern {

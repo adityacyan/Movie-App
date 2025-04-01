@@ -184,7 +184,7 @@ const App = () => {
 
     return (
         <div>
-            <main className="pb-20">
+            <main>
                 <div className="pattern">
                     <div className="wrapper">
                         <header>
