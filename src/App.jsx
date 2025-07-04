@@ -5,17 +5,7 @@ import MovieCard from "./components/MovieCard.jsx";
 import {useDebounce} from "react-use";
 import Footer from "./components/Footer.jsx";
 import MovieList from "./components/MovieList.jsx";
-
-const API_BASE_URL = "https://api.themoviedb.org/3/";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-
-const API_OPTIONS = {
-    method: "GET",
-    headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${API_KEY}`,
-    },
-};
+const BACKEND_URL = "http://localhost:5000"; // Replace with your backend URL in production
 
 const App = () => {
     const [SearchTerm, setSearchTerm] = useState("");
@@ -34,10 +24,8 @@ const App = () => {
         setIsloading(true);
         setError("");
         try {
-            const endpoint = query
-                ? `${API_BASE_URL}search/movie?query=${encodeURIComponent(query)}`
-                : `${API_BASE_URL}discover/movie?sort_by=popularity.desc`;
-            const response = await fetch(endpoint, API_OPTIONS);
+            const endpoint = query ? `${BACKEND_URL}/api/movies?q=${encodeURIComponent(query)}` : `${BACKEND_URL}/api/movies`;
+            const response = await fetch(endpoint);
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
@@ -58,7 +46,7 @@ const App = () => {
 
     const fetchGenres = async () => {
         try {
-            const endpoint = `${API_BASE_URL}genre/movie/list`;
+            const endpoint = `${BACKEND_URL}/api/genres`;
             const response = await fetch(endpoint, API_OPTIONS);
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -72,7 +60,7 @@ const App = () => {
 
     const fetchSimilarMovies = async (movie_id = null) => {
         try {
-            const endpoint = `${API_BASE_URL}movie/${movie_id}/similar`;
+            const endpoint = `${BACKEND_URL}/api/movies/${movie_id}/similar`;
             const response = await fetch(endpoint, API_OPTIONS);
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -88,7 +76,7 @@ const App = () => {
 
     const fetchTrendingMovies = async () => {
         try {
-            const endpoint = `${API_BASE_URL}trending/movie/week?language=en-US`;
+            const endpoint = `${BACKEND_URL}/api/movies/trending`;
             const response = await fetch(endpoint, API_OPTIONS);
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -110,7 +98,7 @@ const App = () => {
 
         // Fetch additional movie details asynchronously
         try {
-            const response = await fetch(`${API_BASE_URL}movie/${movie.id}`, API_OPTIONS);
+            const response = await fetch(`${BACKEND_URL}/api/movies/${movie.id}`);
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
@@ -140,7 +128,7 @@ const App = () => {
     const handleSelectSimilarMovie = async (movie) => {
         // Fetch additional movie details using the /movie/{movie_id} endpoint
         try {
-            const response = await fetch(`${API_BASE_URL}movie/${movie.id}`, API_OPTIONS);
+            const response = await fetch(`${BACKEND_URL}/api/movies/${movie.id}`);
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
