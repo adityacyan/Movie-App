@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -10,8 +11,10 @@ const port = process.env.PORT || 5000;
 const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3/';
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
+app.use(cors({
+  origin: 'http://localhost:5173',
+}));
 app.use(express.json());
-
 
 app.get('/api/movies/trending', async (req, res) => {
   try {
@@ -25,14 +28,9 @@ app.get('/api/movies/trending', async (req, res) => {
     };
 
     const response = await fetch(endpoint, options);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching trending movies: ${response.statusText}`);
-    }
-
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
     const data = await response.json();
     res.json(data);
-
   } catch (error) {
     console.error('Error in /api/movies/trending:', error);
     res.status(500).json({ error: 'Error fetching trending movies' });
@@ -51,14 +49,9 @@ app.get('/api/genres', async (req, res) => {
     };
 
     const response = await fetch(endpoint, options);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching genres: ${response.statusText}`);
-    }
-
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
     const data = await response.json();
     res.json(data);
-
   } catch (error) {
     console.error('Error in /api/genres:', error);
     res.status(500).json({ error: 'Error fetching genres' });
@@ -78,14 +71,9 @@ app.get('/api/movies/:id/similar', async (req, res) => {
     };
 
     const response = await fetch(endpoint, options);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching similar movies: ${response.statusText}`);
-    }
-
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
     const data = await response.json();
     res.json(data);
-
   } catch (error) {
     console.error(`Error in /api/movies/${movieId}/similar:`, error);
     res.status(500).json({ error: 'Error fetching similar movies' });
@@ -105,11 +93,7 @@ app.get('/api/movies/:id', async (req, res) => {
     };
 
     const response = await fetch(endpoint, options);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching movie details: ${response.statusText}`);
-    }
-
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
     const data = await response.json();
     res.json(data);
   } catch (error) {
@@ -137,20 +121,14 @@ app.get('/api/movies', async (req, res) => {
     };
 
     const response = await fetch(endpoint, options);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching movies: ${response.statusText}`);
-    }
-
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
     const data = await response.json();
     res.json(data);
-
   } catch (error) {
     console.error('Error in /api/movies:', error);
     res.status(500).json({ error: 'Error fetching movies' });
   }
 });
-
 
 app.listen(port, () => {
   console.log(`Backend listening on port ${port}`);

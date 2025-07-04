@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Search from "./components/Search.jsx";
 import Spinner from "./components/Spinner.jsx";
 import MovieCard from "./components/MovieCard.jsx";
-import {useDebounce} from "react-use";
+import { useDebounce } from "react-use";
 import Footer from "./components/Footer.jsx";
 import MovieList from "./components/MovieList.jsx";
-const BACKEND_URL = "http://localhost:5000"; // Replace with your backend URL in production
+
+const BACKEND_URL = "http://localhost:5000";
 
 const App = () => {
     const [SearchTerm, setSearchTerm] = useState("");
@@ -24,7 +25,9 @@ const App = () => {
         setIsloading(true);
         setError("");
         try {
-            const endpoint = query ? `${BACKEND_URL}/api/movies?q=${encodeURIComponent(query)}` : `${BACKEND_URL}/api/movies`;
+            const endpoint = query
+                ? `${BACKEND_URL}/api/movies?query=${encodeURIComponent(query)}`
+                : `${BACKEND_URL}/api/movies`;
             const response = await fetch(endpoint);
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -47,7 +50,7 @@ const App = () => {
     const fetchGenres = async () => {
         try {
             const endpoint = `${BACKEND_URL}/api/genres`;
-            const response = await fetch(endpoint, API_OPTIONS);
+            const response = await fetch(endpoint);
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
@@ -61,14 +64,13 @@ const App = () => {
     const fetchSimilarMovies = async (movie_id = null) => {
         try {
             const endpoint = `${BACKEND_URL}/api/movies/${movie_id}/similar`;
-            const response = await fetch(endpoint, API_OPTIONS);
+            const response = await fetch(endpoint);
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
             const data = await response.json();
             setSimilarMovieList(data.results || []);
             console.log("Similar movie list", data);
-
         } catch (error) {
             setError("Error fetching similar movies");
         }
@@ -77,7 +79,7 @@ const App = () => {
     const fetchTrendingMovies = async () => {
         try {
             const endpoint = `${BACKEND_URL}/api/movies/trending`;
-            const response = await fetch(endpoint, API_OPTIONS);
+            const response = await fetch(endpoint);
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
@@ -89,14 +91,12 @@ const App = () => {
     };
 
     const handleShowSimilar = async (movie) => {
-        // Set basic movie information first
         setSelectedMovieForSimilar({
             id: movie.id,
             title: movie.title,
             img: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
         });
 
-        // Fetch additional movie details asynchronously
         try {
             const response = await fetch(`${BACKEND_URL}/api/movies/${movie.id}`);
             if (!response.ok) {
@@ -104,29 +104,24 @@ const App = () => {
             }
             const movieDetails = await response.json();
 
-            // Update selected movie with detailed info
             setSelectedMovieForSimilar((prevDetails) => ({
                 ...prevDetails,
-                overview: movieDetails.overview, // Adding full overview
-                score: movieDetails.vote_average, // Adding vote average score
-                lang: movieDetails.original_language, // Adding language
-                year: movieDetails.release_date,  // Adding release date
-                runtime: movieDetails.runtime,  // Adding runtime
-                genres: movieDetails.genres,  // Adding genres
+                overview: movieDetails.overview,
+                score: movieDetails.vote_average,
+                lang: movieDetails.original_language,
+                year: movieDetails.release_date,
+                runtime: movieDetails.runtime,
+                genres: movieDetails.genres,
             }));
-
         } catch (error) {
-            console.error('Error fetching movie details:', error);
-            setError('Error fetching movie details');
+            console.error("Error fetching movie details:", error);
+            setError("Error fetching movie details");
         }
 
-        // Fetch similar movies after setting the basic movie info
         await fetchSimilarMovies(movie.id);
     };
 
-
     const handleSelectSimilarMovie = async (movie) => {
-        // Fetch additional movie details using the /movie/{movie_id} endpoint
         try {
             const response = await fetch(`${BACKEND_URL}/api/movies/${movie.id}`);
             if (!response.ok) {
@@ -134,27 +129,24 @@ const App = () => {
             }
             const movieDetails = await response.json();
 
-            // Set the selected movie along with the fetched details
             setSelectedMovieForSimilar({
                 id: movie.id,
                 title: movie.title,
                 img: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : null,
-                overview: movieDetails.overview,  // Adding full overview
-                score: movieDetails.vote_average, // Adding vote average score
-                lang: movieDetails.original_language, // Adding language
-                year: movieDetails.release_date,  // Adding release date
-                runtime: movieDetails.runtime,  // Adding runtime
-                genres: movieDetails.genres,  // Adding genres
+                overview: movieDetails.overview,
+                score: movieDetails.vote_average,
+                lang: movieDetails.original_language,
+                year: movieDetails.release_date,
+                runtime: movieDetails.runtime,
+                genres: movieDetails.genres,
             });
 
-            // Fetch similar movies as well
             await fetchSimilarMovies(movie.id);
         } catch (error) {
-            console.error('Error fetching movie details:', error);
-            setError('Error fetching movie details');
+            console.error("Error fetching movie details:", error);
+            setError("Error fetching movie details");
         }
     };
-
 
     const handleCloseSimilar = () => {
         setSelectedMovieForSimilar(null);
@@ -176,7 +168,7 @@ const App = () => {
                 <div className="pattern">
                     <div className="wrapper">
                         <header>
-                            <img src="hero.png" alt="hero banner"/>
+                            <img src="hero.png" alt="hero banner" />
                             <h1>
                                 Find <span className="text-gradient">Movies</span> which you will
                                 enjoy without Hassle
@@ -202,12 +194,12 @@ const App = () => {
                                 </div>
                             </section>
                         )}
-                        <Search SearchTerm={SearchTerm} setSearchTerm={setSearchTerm}/>
+                        <Search SearchTerm={SearchTerm} setSearchTerm={setSearchTerm} />
                     </div>
                     <section className="all-movies">
                         <h2>All Movies</h2>
                         {isloading ? (
-                            <Spinner/>
+                            <Spinner />
                         ) : error ? (
                             <p className="text-red-500">{error}</p>
                         ) : (
